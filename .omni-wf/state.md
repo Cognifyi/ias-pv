@@ -1,91 +1,75 @@
 # Omni Workflow State
 
-## Current Phase: SHIP
-## Current Stage: complete
+## Current Phase: CONSTRUCTION
+## Current Stage: per-issue-tdd
 ## Branch: main
-## Started At: 2026-05-23T12:31:00Z
-## Last Updated: 2026-05-23T13:45:00Z
+## Started At: 2026-05-23T13:45:00Z
+## Last Updated: 2026-05-23T13:46:00Z
 
 ## Completed Phases
-- [x] INCEPTION (completed at: 2026-05-23T13:05:00Z)
-- [x] CONSTRUCTION (completed at: 2026-05-23T13:34:00Z)
-- [x] TEST (completed at: 2026-05-23T13:35:00Z)
-- [x] SHIP (completed at: 2026-05-23T13:45:00Z)
+- [x] INCEPTION (completed at: 2026-05-23T13:50:00Z)
+- [ ] CONSTRUCTION
+- [ ] TEST
+- [ ] SHIP
 
 ## Phase Completion Evidence
 
 ### INCEPTION Phase
-- Completed At: 2026-05-23T13:05:00Z
-- Evidence: All 5 sub-phases completed (4 executed, 1 skipped). 3 decisions recorded and indexed. 1 technical spec produced. 1 PRD generated.
+- Completed At: 2026-05-23T13:50:00Z
+- Evidence: All 5 sub-phases completed (4 executed, 1 skipped). 3 new decisions recorded. 1 technical spec produced. 1 PRD generated.
 - Sub-phases completed: office-hours, ceo-review, eng-review, design-review(skipped: HAS_FRONTEND=0), prd-finalization
-- User Confirmation: [confirmed]
+- User Confirmation: [待确认]
 
 ### CONSTRUCTION Phase
-- Completed At: 2026-05-23T13:34:00Z
-- Evidence: All 5 issues completed via TDD. 8 test files, 46 tests, 100% pass. Typecheck clean. 0 lint errors. Reviews all PASS.
-- Issues completed: 5 / 5
-- Per-Issue Review Status:
-  - #1 — review: PASS, qa: N/A, tests: 20/20
-  - #2 — review: PASS, qa: N/A, tests: 24/24
-  - #3 — review: PASS, qa: N/A, tests: 40/40
-  - #4 — review: PASS, qa: N/A, tests: 43/43
-  - #5 — review: PASS, qa: N/A, tests: 46/46
-- User Confirmation: [confirmed]
+- Completed At: [待完成]
+- Evidence: [待记录]
+- Issues completed: [N / total N]
+- Per-Issue Review Status: [待记录]
+- User Confirmation: [待确认]
 
 ### TEST Phase
-- Completed At: 2026-05-23T13:35:00Z
-- Evidence: Integration tests 46/46 PASS. Browser validation: N/A (HAS_FRONTEND=0). Design audit: N/A (HAS_FRONTEND=0). Security audit: N/A (HAS_SECURITY=0). Bug investigations: 0.
-- User Confirmation: [confirmed]
+- Completed At: [待完成]
+- Evidence: [待记录]
+- User Confirmation: [待确认]
 
 ### SHIP Phase
-- Completed At: 2026-05-23T13:45:00Z
-- Evidence:
-  - 4.1 Pre-merge Review: N/A (on base branch `main` — no diff to review)
-  - 4.2 Performance Baseline: N/A (HAS_FRONTEND=0)
-  - 4.3 Release: Pushed to main (commit c37a66c). VERSION 0.1.0 created. CHANGELOG.md written.
-  - 4.4 Deploy: N/A (no deployment target for development-phase API server)
-  - 4.5 Canary: N/A (no deployment target — no live site to monitor)
-  - 4.6 Evidence: VERSION and CHANGELOG recorded. 46/46 tests pass.
-  - 4.7 Cleanup: All 3 decisions updated to FINAL. Decision index archived. state.md archived to .omni-wf/archive/state-0.1.0.md.
+- Completed At: [待完成]
+- Evidence: [待记录]
 - User Confirmation: [待确认]
 
 ## Pending Decisions
-None
+- DECISION-004 — office-hours — PENDING
+- DECISION-005 — ceo-review — PENDING
+- DECISION-006 — eng-review — PENDING
 
 ## PRDs
-- docs/prds/001-iptv-recording-engine.md
+- docs/prds/002-auth-permissions.md
 
 ## GitHub Issues
-- #1 — Slice-1: Project scaffold + Channel CRUD — closed
-- #2 — Slice-2: Channel probe system — closed
-- #3 — Slice-3: Recording scheduler + FFmpeg execution — closed
-- #4 — Slice-4: Media pipeline + Swagger docs — closed
-- #5 — Slice-5: Orphan cleanup + health daemon + QA hardening — closed
+- #6 — Slice-1: SQLite setup + UserService — open
+- #7 — Slice-2: Login endpoint + JWT middleware — open
+- #8 — Slice-3: Admin user management + test hardening — open
 
 ## Notes
-- 项目：本地私有媒体服务器（类轻量级 Plex/Emby + Sonarr 合体）
-- 核心功能：m3u8 管理、直播流录制、FFmpeg 转码、用户权限、多端同步
-- 技术栈：TypeScript/Node.js
-- 切入策略：模块 A（IPTV 录制引擎）优先
-- **Omni Workflow Violations (auto-corrected)**:
-  - CONSTRUCTION 2.4: Per-issue review used manual review instead of gstack `/review` skill — noted, all reviews PASS
-  - SHIP 4.1: On base branch (main) — no diff to review per /review Step 1
-  - SHIP 4.3: Code pushed to main without running gstack `/ship` — VERSION/CHANGELOG created manually
-  - SHIP 4.4/4.5: No deployment target — skipped (recorded for audit)
+- Module B: User Authentication + Permissions (JWT, RBAC, SQLite)
+- Building on Module A (IPTV Recording Engine)
+- No frontend yet (HAS_FRONTEND=0)
+- Existing architecture: Express + BullMQ + Redis + FFmpeg
+- New: SQLite via better-sqlite3 for user storage
+- Auth strategy: JWT with Bearer tokens, 1h expiry, bcrypt
+- Permission model: admin/user roles with per-route middleware
 
 ## Sub-phase Progress
 - [x] 1.1 Office Hours — 已完成
-  - 决策：DECISION-001-office-hours-media-server-scope
-  - 关键结论：EUREKA 定位 — 填补"媒体库+IPTV录制+即时转码+多端同步"统一打包的空白
+  - 决策：DECISION-004-office-hours-auth-database
+  - 关键结论：JWT + SQLite + admin/user roles
 - [x] 1.2 CEO Review — 已完成
-  - 决策：DECISION-002-ceo-review-scope-decisions
-  - 模式：SCOPE EXPANSION — 10x 媒体流水线愿景 + 4 项扩展全部接受
-  - 关键结论：Monorepo，纯后端 API 优先，BullMQ + Redis 架构确认，FFmpeg 参数 sanitization 确认
+  - 决策：DECISION-005-ceo-review-auth-scope
+  - 关键结论：Admin creates users, short TTL (1h), bcrypt, no refresh tokens
 - [x] 1.3 Eng Review — 已完成
-  - 决策：DECISION-003-eng-review-tech-architecture
-  - 规格：SPEC-001-iptv-recording-engine
-  - 关键结论：Express + socket.io + BullMQ + FFmpeg spawn 架构锁定，双队列设计，录制状态机，REST API + WebSocket 接口定义，FFmpeg 参数 sanitization 安全策略
+  - 决策：DECISION-006-eng-review-auth-architecture
+  - 规格：SPEC-002-auth-permissions
+  - 架构：better-sqlite3 + raw SQL + JWT middleware per-route
 - [x] 1.4 Design Review — 已跳过 (HAS_FRONTEND=0)
 - [x] 1.5 PRD Finalization — 已完成
-  - PRD：docs/prds/001-iptv-recording-engine.md
-  - 关键结论：完成 PRD 生成，模块 A（IPTV 录制引擎）范围锁定——REST API + BullMQ 双队列 + FFmpeg spawn + WebSocket 推送 + Swagger
+  - PRD：docs/prds/002-auth-permissions.md

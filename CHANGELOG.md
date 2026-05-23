@@ -1,6 +1,18 @@
 # Changelog
 
-## [0.1.0] — 2026-05-23
+## [0.2.0] — 2026-05-23
+
+### Added
+- Module B: User Authentication + Permissions
+- SQLite database (better-sqlite3, WAL mode) for persistent user storage
+- UserService: bcrypt-hashed CRUD with validation, seed script for initial admin
+- Login endpoint (POST /api/auth/login) returning JWT Bearer tokens (HS256, 1h expiry)
+- requireAuth middleware — verifies JWT, attaches req.user
+- requireAdmin middleware — two-role RBAC (admin/user), 403 on insufficient role
+- Admin user management API: POST/GET/DELETE /api/auth/users
+- Admin-only mutation guards on channel POST/PUT/DELETE/probe and recording POST/DELETE
+- Swagger docs updated with auth endpoints + bearerAuth security scheme
+- 51 new tests (97 total, 13 files, 100% pass)
 
 ### Added
 - Module A: IPTV Recording Engine — initial implementation
