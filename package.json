@@ -1,0 +1,13 @@
+{
+  "name": "ias-pv",
+  "private": true,
+  "pnpm": {
+    "onlyBuiltDependencies": ["esbuild@0.27.7", "esbuild@0.28.0"]
+  },
+  "scripts": {
+    "dev": "pnpm --filter @ias-pv/api dev",
+    "test": "pnpm -r test",
+    "typecheck": "pnpm -r typecheck",
+    "lint": "pnpm -r lint"
+  }
+}
