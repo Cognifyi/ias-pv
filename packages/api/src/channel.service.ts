@@ -16,7 +16,7 @@ export class ChannelService {
       id: generateId(),
       name: input.name.trim(),
       url: input.url.trim(),
-      group: input.group.trim(),
+      group: input.group?.trim() ?? '',
       status: 'unknown',
       createdAt: now,
       updatedAt: now,

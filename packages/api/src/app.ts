@@ -8,8 +8,7 @@ import { createRecordingRouter } from './recording.routes.js';
 import { createSwaggerRouter } from './swagger.js';
 import { UserService } from './auth/user.service.js';
 import { createAuthRouter } from './auth/auth.routes.js';
-import { requireAuth } from './auth/auth.middleware.js';
-import type { AuthUser } from './auth/auth.middleware.js';
+import { requireAuth, requireAdmin } from './auth/auth.middleware.js';
 
 export interface AppOptions {
   db?: Database.Database;
@@ -38,9 +37,9 @@ export function createApp(options?: AppOptions): {
     userService.init();
     app.use('/api/auth', createAuthRouter(userService));
 
-    app.use('/api/channels', requireAuth, createChannelRouter(channelService));
+    app.use('/api/channels', requireAuth, createChannelRouter(channelService, requireAdmin));
 
-    app.post('/api/channels/:id/probe', requireAuth, async (req, res) => {
+    app.post('/api/channels/:id/probe', requireAuth, requireAdmin, async (req, res) => {
       const channel = channelService.getById(req.params.id as string);
       if (!channel) {
         res.status(404).json({ error: 'Channel not found' });
@@ -53,6 +52,7 @@ export function createApp(options?: AppOptions): {
       recordingService,
       channelService,
       process.env.OUTPUT_DIR || './recordings',
+      requireAdmin,
     ));
 
     app.get('/api/health', requireAuth, (_req, res) => {

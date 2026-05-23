@@ -1,10 +1,14 @@
 import { Router, Request, Response } from 'express';
 import { ChannelService } from './channel.service.js';
 import type { CreateChannelInput } from '@ias-pv/shared';
+import type { RequestHandler } from 'express';
 
 type IdParams = { id: string };
 
-export function createChannelRouter(service: ChannelService): Router {
+export function createChannelRouter(
+  service: ChannelService,
+  adminMiddleware?: RequestHandler,
+): Router {
   const router = Router();
 
   router.get('/', (_req: Request, res: Response) => {
@@ -20,7 +24,9 @@ export function createChannelRouter(service: ChannelService): Router {
     res.json(channel);
   });
 
-  router.post('/', (req: Request, res: Response) => {
+  const adminHandlers = adminMiddleware ? [adminMiddleware] : [];
+
+  router.post('/', ...adminHandlers, (req: Request, res: Response) => {
     try {
       const input = req.body as CreateChannelInput;
       const channel = service.create(input);
@@ -31,7 +37,7 @@ export function createChannelRouter(service: ChannelService): Router {
     }
   });
 
-  router.put('/:id', (req: Request<IdParams>, res: Response) => {
+  router.put('/:id', ...adminHandlers, (req: Request<IdParams>, res: Response) => {
     try {
       const channel = service.update(req.params.id, req.body);
       if (!channel) {
@@ -45,7 +51,7 @@ export function createChannelRouter(service: ChannelService): Router {
     }
   });
 
-  router.delete('/:id', (req: Request<IdParams>, res: Response) => {
+  router.delete('/:id', ...adminHandlers, (req: Request<IdParams>, res: Response) => {
     const deleted = service.delete(req.params.id);
     if (!deleted) {
       res.status(404).json({ error: 'Channel not found' });

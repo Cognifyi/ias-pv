@@ -3,6 +3,7 @@ import { RecordingService } from './recording.service.js';
 import { ChannelService } from './channel.service.js';
 import { recordQueue } from './queue.js';
 import { executeRecording, cancelRecording } from './recording.worker.js';
+import type { RequestHandler } from 'express';
 
 type IdParams = { id: string };
 
@@ -10,6 +11,7 @@ export function createRecordingRouter(
   recordingService: RecordingService,
   channelService: ChannelService,
   outputDir: string,
+  adminMiddleware?: RequestHandler,
 ): Router {
   const router = Router();
 
@@ -26,7 +28,9 @@ export function createRecordingRouter(
     res.json(recording);
   });
 
-  router.post('/', async (req: Request, res: Response) => {
+  const adminHandlers = adminMiddleware ? [adminMiddleware] : [];
+
+  router.post('/', ...adminHandlers, async (req: Request, res: Response) => {
     try {
       const { channelId, cronExpression, duration, maxRetries } = req.body;
       const channel = channelService.getById(channelId);
@@ -35,7 +39,6 @@ export function createRecordingRouter(
         return;
       }
 
-      // Per-channel output path (falls back to global outputDir)
       const channelOutputDir = channel.metadata?.outputPath || outputDir;
 
       const recording = recordingService.create(
@@ -55,7 +58,7 @@ export function createRecordingRouter(
     }
   });
 
-  router.delete('/:id', (req: Request<IdParams>, res: Response) => {
+  router.delete('/:id', ...adminHandlers, (req: Request<IdParams>, res: Response) => {
     const recording = recordingService.getById(req.params.id);
     if (!recording) {
       res.status(404).json({ error: 'Recording not found' });
