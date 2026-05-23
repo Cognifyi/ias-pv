@@ -1,9 +1,13 @@
-# CEO Plan: ias-pv — IPTV Media Server
+# Decision: DECISION-002-ceo-review-scope-decisions
+
+## Phase: INCEPTION
+## Sub-phase: ceo-review
+## Status: FINAL
+## Date: 2026-05-23T12:31:00Z
 
 ## Source
 - Branch: main
 - Mode: SCOPE EXPANSION
-- Date: 2026-05-23T12:31:00Z
 
 ## Related Decisions
 - docs/decisions/DECISION-001-office-hours-media-server-scope.md
